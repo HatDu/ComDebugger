@@ -1,0 +1,374 @@
+﻿<Window x:Class="ComDebugger.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
+        xmlns:local="clr-namespace:ComDebugger"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="575" Width="750" MinWidth="725" MinHeight="550" MaxWidth="850" MaxHeight="650" Loaded="Window_Loaded" Closing="Window_Closing" KeyDown="Window_KeyDown" Closed="Window_Closed">
+    <Window.Resources>
+        <LinearGradientBrush x:Key="ButtonNormalBackgroundFill" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFFFFFFF" Offset="0"/>
+            <GradientStop Color="#FFF0F0EA" Offset="0.9"/>
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="ButtonBorder" Color="#FF003C74"/>
+        <Style x:Key="ToggleButtonStyle1" TargetType="{x:Type ToggleButton}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Background" Value="{StaticResource ButtonNormalBackgroundFill}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ButtonBorder}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <ControlTemplate.Resources>
+                            <Storyboard x:Key="OnChecked1">
+                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="path">
+                                    <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="40,0,0,0"/>
+                                </ThicknessAnimationUsingKeyFrames>
+                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="path1">
+                                    <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="40,0,0,0"/>
+                                </ThicknessAnimationUsingKeyFrames>
+                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="path2">
+                                    <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="40,0,0,0"/>
+                                </ThicknessAnimationUsingKeyFrames>
+                                <StringAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Text)" Storyboard.TargetName="displayText">
+                                    <DiscreteStringKeyFrame KeyTime="0" Value="ON"/>
+                                </StringAnimationUsingKeyFrames>
+                            </Storyboard>
+                            <Storyboard x:Key="OnUnchecked1">
+                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="path">
+                                    <EasingThicknessKeyFrame KeyTime="0" Value="40,0,0,0"/>
+                                    <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                                </ThicknessAnimationUsingKeyFrames>
+                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="path1">
+                                    <EasingThicknessKeyFrame KeyTime="0" Value="40,0,0,0"/>
+                                    <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                                </ThicknessAnimationUsingKeyFrames>
+                                <ThicknessAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="path2">
+                                    <EasingThicknessKeyFrame KeyTime="0" Value="40,0,0,0"/>
+                                    <EasingThicknessKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                                </ThicknessAnimationUsingKeyFrames>
+                                <StringAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Text)" Storyboard.TargetName="displayText">
+                                    <DiscreteStringKeyFrame KeyTime="0" Value="OFF"/>
+                                </StringAnimationUsingKeyFrames>
+                                <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(TextElement.Foreground).(SolidColorBrush.Color)" Storyboard.TargetName="displayText">
+                                    <EasingColorKeyFrame KeyTime="0" Value="White"/>
+                                    <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#FF63FA00"/>
+                                </ColorAnimationUsingKeyFrames>
+                            </Storyboard>
+                        </ControlTemplate.Resources>
+                        <Border CornerRadius="10" Background="#FF3B3939" Width="60" Height="20">
+                            <Grid>
+                                <TextBlock x:Name="displayText" Text="OFF" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                                <Path x:Name="path2" Fill="Black">
+                                    <Path.Data>
+                                        <GeometryGroup>
+                                            <GeometryGroup.Children>
+                                                <EllipseGeometry Center="10,10" RadiusX="8.5" RadiusY="8.5"></EllipseGeometry>
+                                            </GeometryGroup.Children>
+                                        </GeometryGroup>
+                                    </Path.Data>
+                                </Path>
+                                <Path x:Name="path1" Fill="#FF818080">
+                                    <Path.Data>
+                                        <GeometryGroup>
+                                            <GeometryGroup.Children>
+                                                <EllipseGeometry Center="10,10" RadiusX="7" RadiusY="7"></EllipseGeometry>
+                                            </GeometryGroup.Children>
+                                        </GeometryGroup>
+                                    </Path.Data>
+                                </Path>
+                                <Path x:Name="path">
+                                    <Path.Fill>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF807F7F" Offset="0"/>
+                                            <GradientStop Color="#FF373636" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Path.Fill>
+                                    <Path.Data>
+                                        <GeometryGroup>
+                                            <GeometryGroup.Children>
+                                                <EllipseGeometry Center="10,10" RadiusX="8" RadiusY="8"></EllipseGeometry>
+                                            </GeometryGroup.Children>
+                                        </GeometryGroup>
+                                    </Path.Data>
+                                </Path>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="ToggleButton.Checked">
+                                <BeginStoryboard Storyboard="{StaticResource OnChecked1}"/>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="ToggleButton.Unchecked">
+                                <BeginStoryboard x:Name="OnUnchecked1_BeginStoryboard" Storyboard="{StaticResource OnUnchecked1}"/>
+                            </EventTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--文本框格式-->
+        <Style x:Key="Test_TextBox" TargetType="{x:Type TextBox}">
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TextBox}">
+                        <Border x:Name="border" Width="Auto" Height="Auto" BorderThickness="1" BorderBrush="#FF7F9DB9">
+                            <Grid x:Name="grid" Background="#FFFFFF">
+                                <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Name="FrameGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="692*"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="398*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <!--菜单栏-->
+        <DockPanel Grid.Row="0" Grid.ColumnSpan="2">
+            <Menu>
+                <MenuItem x:Name="FileItem" Header="文件(_F)">
+                    <MenuItem Header="打开" x:Name="Open_MenuItem" InputGestureText="Ctrl+O"/>
+                    <Separator/>
+                    <MenuItem Header="保存" x:Name="Save_MenuItem" InputGestureText="Ctrl+S"></MenuItem>
+                    <MenuItem Header="另存为" x:Name="SaveAs_MenuItem" InputGestureText="Ctrl+A"/>
+                    <Separator/>
+                    <MenuItem Header="退出(_E)" x:Name="Exit_MenuItem" InputGestureText="Ctrl+E"></MenuItem>
+                </MenuItem>
+
+                <MenuItem x:Name="Help" Header="帮助(_H)">
+                    <MenuItem x:Name="About_MenuItem" Header="关于" InputGestureText="Ctrl+F1"/>
+                    <Separator/>
+                    <MenuItem x:Name="HomePage_MenuItem" Header="反馈"/>
+                </MenuItem>
+            </Menu>
+            <ToggleButton Name="PortSwitch" Style="{StaticResource ToggleButtonStyle1}" Grid.Column="1" Click="PortSwitch_Click" HorizontalAlignment="Right" Checked="PortSwitch_Checked" ToolTip="COM口总开关">
+
+            </ToggleButton>
+        </DockPanel>
+
+        <!--状态栏-->
+        <StatusBar Name="ststusbar" Grid.Row="3" Grid.ColumnSpan="2">
+            <TextBlock>Status :</TextBlock>
+            <TextBlock Name="comName" MinWidth="50" Foreground="Black">NONE</TextBlock>
+            <TextBlock Name="comStatus" MinWidth="64">~~</TextBlock>
+            <Separator></Separator>
+            <TextBlock>Receive Bytes :</TextBlock>
+            <TextBlock Name="recByte" MinWidth="100">0</TextBlock>
+            <Separator></Separator>
+            <TextBlock>Send Bytes :</TextBlock>
+            <TextBlock Name="sendByte" MinWidth="100">0</TextBlock>
+        </StatusBar>
+
+        <!--Tab栏-->
+        <TabControl Name="functionTab" Grid.Row="1" Margin="1" SelectionChanged="functionTab_SelectionChanged">
+            <TabItem Name="NormalTab" Header="串口调试">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70*"/>
+                        <ColumnDefinition Width="15*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="36*"/>
+                        <RowDefinition Height="17*"/>
+                    </Grid.RowDefinitions>
+                    <TextBox Grid.Column="0" Grid.Row="0" Name="recTbx" Margin="2,6,0,3" IsReadOnly="True" AcceptsTab="True" TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Animated" IsUndoEnabled="False" Foreground="#FF3AEE12" Background="#FF151515">
+                        <TextBox.VerticalScrollBarVisibility>Visible</TextBox.VerticalScrollBarVisibility>
+                        <TextBox.TextAlignment>left</TextBox.TextAlignment>
+                        <TextBox.TextWrapping>Wrap</TextBox.TextWrapping>
+                        <TextBox.AcceptsReturn>true</TextBox.AcceptsReturn>
+                    </TextBox>
+                    <GroupBox Header="接收设置" Grid.Column="1" MinWidth="120">
+                        <ListBox>
+                            <CheckBox Name="ASCII_recMode" DockPanel.Dock="Top">ASCII</CheckBox>
+                            <Separator></Separator>
+                            <Button Name="recClear_btn" Click="recClear_btn_Click">清空接收区</Button>
+                            <CheckBox Name="recCountClear_cbx" IsChecked="True" ToolTip="接受计数同时清零">计数清零</CheckBox>
+                            <Separator></Separator>
+                            <Button Name="saveFileBtn" Content="文 件 保 存" Click="saveFileBtn_Click" ToolTip="将接收区数据保存"/>
+                        </ListBox>
+
+                    </GroupBox>
+                    <!--发送文件区TabControl-->
+                    <TabControl Name="sendControl" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2">
+                        <TabItem Header="键盘输入">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="75*"/>
+                                    <ColumnDefinition Width="30*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Name="SendTbx" TextOptions.TextFormattingMode="Display" AcceptsTab="True">
+                                    <TextBox.VerticalScrollBarVisibility>Visible</TextBox.VerticalScrollBarVisibility>
+                                    <TextBox.TextAlignment>left</TextBox.TextAlignment>
+                                    <TextBox.TextWrapping>Wrap</TextBox.TextWrapping>
+                                    <TextBox.AcceptsReturn>true</TextBox.AcceptsReturn>
+                                </TextBox>
+
+                                <!--sendControl-->
+                                <GroupBox Header="发送设置" Grid.Column="1" Margin="2,1,1,1" MinWidth="200">
+                                    <GroupBox.Resources>
+                                        <Style x:Key="BigFontButton">
+                                            <Style.Setters>
+                                                <Setter Property="Control.FontFamily" Value="Times New Roman" />
+                                                <Setter Property="Control.FontSize" Value="18" />
+                                                <Setter Property="Control.FontWeight" Value="Bold" />
+                                            </Style.Setters>
+                                            <Style.Triggers>
+                                                <!--定义事件触发器-->
+                                                <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                                                    <!--事件触发时只需的操作-->
+                                                    <EventTrigger.Actions>
+                                                        <!--把动画放在动画面板中-->
+                                                        <BeginStoryboard>
+                                                            <!--在0.2秒的时间内将字体放大到22单位-->
+                                                            <Storyboard>
+                                                                <DoubleAnimation Duration="0:0:0.2" Storyboard.TargetProperty="FontSize" To="22"/>
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger.Actions>
+                                                </EventTrigger>
+                                                <!--鼠标移开触发的事件-->
+                                                <EventTrigger RoutedEvent="Mouse.MouseLeave">
+                                                    <EventTrigger.Actions>
+                                                        <BeginStoryboard>
+                                                            <!--在1秒的时间内将字体尺寸缩小到原来的大小-->
+                                                            <!--如果目标字体尺寸没有明确指定，则WPF将默认使用第一次动画之前按钮的字体尺寸-->
+                                                            <Storyboard>
+                                                                <DoubleAnimation Duration="0:0:1" Storyboard.TargetProperty="FontSize"  />
+                                                            </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </EventTrigger.Actions>
+                                                </EventTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </GroupBox.Resources>
+                                    <Grid Grid.Column="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="17*"/>
+                                            <ColumnDefinition Width="15*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="25*"/>
+                                            <RowDefinition Height="25*"/>
+                                            <RowDefinition Height="25*"/>
+                                            <RowDefinition Height="25*"/>
+                                        </Grid.RowDefinitions>
+                                        <CheckBox Name="hexSendMode" VerticalAlignment="Center">16 进 制</CheckBox>
+                                        <CheckBox Name="autoSendMode" Grid.Row="1" VerticalAlignment="Center" IsChecked="True">循环发送</CheckBox>
+                                        <DockPanel Grid.Row="2">
+                                            <TextBlock VerticalAlignment="Center" Margin="5">周期</TextBlock>
+                                            <TextBox Name="sendIntervalTbx" Style="{StaticResource BigFontButton}"  VerticalAlignment="Center" LostFocus="sendInterval_LostFocus" TextChanged="sendInterval_TextChanged">1000</TextBox>
+                                            <TextBlock VerticalAlignment="Center">ms</TextBlock>
+                                        </DockPanel>
+                                        <Button Name="openFile_btn" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Center" Click="openFile_btn_Click">打开文件</Button>
+                                        <Button Name="clearSendArea" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Click="clearSendArea_Click">清空发送区</Button>
+                                        <Button Name="sendCountClearCbx" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Click="sendCountClearCbx_Click">计 数 清 零</Button>
+                                        <ToggleButton Name="sendBtn" Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" MinHeight="25" MinWidth="65" HorizontalAlignment="Center" VerticalAlignment="Center" Click="sendBtn_Click" Checked="sendBtn_Checked">发送数据</ToggleButton>
+                                    </Grid>
+                                </GroupBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="图片发送">
+
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </TabItem>
+            <TabItem Name="WaveTab" Header="示波器">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="100*"/>
+                    </Grid.RowDefinitions>
+                    <!--虚拟示波图表-->
+                    <d3:ChartPlotter x:Name="Plotter" Grid.Row="1" Margin="10,10,20,10" FontSize="10" TextOptions.TextFormattingMode="Display">
+                        
+                        <d3:ChartPlotter.VerticalAxis>
+                            <d3:VerticalIntegerAxis/>
+                        </d3:ChartPlotter.VerticalAxis>
+
+                        <d3:ChartPlotter.HorizontalAxis>
+                            <d3:HorizontalIntegerAxis />
+                        </d3:ChartPlotter.HorizontalAxis>
+                        <!--<d3:Header Content="CPU Performance History"/>
+                            <d3:VerticalAxisTitle Content="Percentage"/>-->
+                    </d3:ChartPlotter>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="10*"/>
+                            <ColumnDefinition Width="5*"/>
+                        </Grid.ColumnDefinitions>
+                        <CheckBox Name="waveCH1" IsChecked="True" Grid.Column="1" Foreground="#FFC72424">Chanel1</CheckBox>
+                        <CheckBox Name="waveCH2" IsChecked="True" Grid.Column="2" Foreground="#FF0AD425">Chanel2</CheckBox>
+                        <CheckBox Name="waveCH3" IsChecked="True" Grid.Column="3" Foreground="#FF146EF1">Chanel3</CheckBox>
+                        <CheckBox Name="waveCH4" IsChecked="True" Grid.Column="4" Foreground="#FF9802EE">Chanel4</CheckBox>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Name="CameraTab" Header="图像">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="401*"/>
+                        <RowDefinition Height="76*"/>
+                    </Grid.RowDefinitions>
+                    <Canvas HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Image Name="cameraImage" Height="auto" Width="auto" Margin="10,10"></Image>
+                    </Canvas>
+                </Grid>
+            </TabItem>
+            <TabItem Header="CCD">
+
+            </TabItem>
+        </TabControl>
+        <Border Grid.Row="1" Grid.Column="1" Margin="0,1,0,0">
+            <DockPanel >
+                <Expander Name="SettingExpander" MinWidth="23" ToolTip="点击此处进行串口设置" >
+                    <Grid x:Name="expgrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="51*"/>
+                            <ColumnDefinition Width="91*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Label Grid.Row="0" Content="串   口"/>
+                        <Label Grid.Row="1" Content="波特率"/>
+                        <Label Grid.Row="2" Content="数据位"/>
+                        <Label Grid.Row="3" Content="停止位"/>
+                        <Label Grid.Row="4" Content="校验位"/>
+                        <ComboBox Grid.Column="1" Grid.Row="0" x:Name="portName" MinWidth="75" Margin="0,2"/>
+                        <ComboBox Grid.Column="1" Grid.Row="1" x:Name="baudRate" Margin="0,2"/>
+                        <ComboBox Grid.Column="1" Grid.Row="2" x:Name="DataBits" Margin="0,2" />
+                        <ComboBox Grid.Column="1" Grid.Row="3" x:Name="StopBits" Margin="0,2" />
+                        <ComboBox Grid.Column="1" Grid.Row="4" x:Name="parity" Margin="0,2" />
+                        <Button Grid.Row="5" Grid.ColumnSpan="2">重 置</Button>
+                    </Grid>
+                </Expander>
+            </DockPanel>
+        </Border>
+
+    </Grid>
+</Window>
