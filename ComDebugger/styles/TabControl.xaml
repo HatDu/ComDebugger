@@ -1,0 +1,107 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ComDebugger">
+        <!--
+        <local:ContentToMarginConverter x:Key="contentToMarginConverter"/>
+        <local:ContentToPathConverter x:Key="contentToPathConverter"/>
+        -->
+        <SolidColorBrush x:Key="BorderBrush" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="HoverBrush" Color="#FFFF4500"/>
+        <SolidColorBrush x:Key="ForegroundBrush" Color="#FF000000"/>
+
+        <LinearGradientBrush x:Key="TabControlBackgroundBrush" EndPoint="0.5,0" StartPoint="0.5,1">
+            <GradientStop Color="#FFa9cde7" Offset="0"/>
+            <GradientStop Color="#FFe7f4fc" Offset="0.3"/>
+            <GradientStop Color="#FFf2fafd" Offset="0.85"/>
+            <GradientStop Color="#FFe4f6fa" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="TabItemPathBrush" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FF3164a5" Offset="0"/>
+            <GradientStop Color="#FFe4f6fa" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- TabControl style -->
+
+        <Style x:Key="TabControlStyle" TargetType="{x:Type TabControl}">
+            <Setter Property="BorderThickness" Value="1"/>
+            <!-- <Setter Property="TabStripPlacement" Value="Bottom" /> -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabControl">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="1" BorderThickness="2,0,2,2" Panel.ZIndex="2" CornerRadius="0,0,2,2"
+                                    BorderBrush="{StaticResource BorderBrush}"
+                                    Background="{StaticResource TabControlBackgroundBrush}">
+                                <ContentPresenter ContentSource="SelectedContent"/>
+                            </Border>
+                            <!--<src:TabPanel Grid.Row="0" Offset="16" Panel.ZIndex="1" IsItemsHost="true"/>-->
+                            <StackPanel Orientation="Horizontal" Grid.Row="0" Panel.ZIndex="1" IsItemsHost="true"/>
+                            <Rectangle Grid.Row="0" Height="2" VerticalAlignment="Bottom" Fill="{StaticResource BorderBrush}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- TabItem style -->
+
+        <Style x:Key="{x:Type TabItem}" TargetType="{x:Type TabItem}">
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <!-- TargetType="{x:Type TabItem}" -->
+                        <Grid x:Name="grd">
+                            <Path x:Name="TabPath" StrokeThickness="2" Fill="{StaticResource TabItemPathBrush}" Stroke="{StaticResource BorderBrush}"
+                                  Margin="{Binding ElementName=TabItemContent, Converter={x:Static local:ContentToMarginConverter.Value}}"
+                                  Data="{Binding ElementName=TabItemContent, Converter={x:Static local:ContentToPathConverter.Value}}">
+                                <!-- Fix
+                                <Path.Data>
+                                    <PathGeometry>
+                                        <PathFigure IsClosed="False" StartPoint="1,0" 
+                                                    Segments="{Binding ElementName=TabItemContent, Converter={x:Static local:ContentToPathConverter.Value}}">
+                                        </PathFigure>
+                                    </PathGeometry>
+                                </Path.Data>
+                                -->
+                                <Path.LayoutTransform>
+                                    <ScaleTransform ScaleY="-1"/>
+                                </Path.LayoutTransform>
+                            </Path>
+                            <Rectangle x:Name="TabItemTopBorder" Height="2" Visibility="Visible"
+                                       VerticalAlignment="Bottom" Fill="{StaticResource BorderBrush}"
+                                       Margin="{Binding ElementName=TabPath, Path=Margin}" />
+                            <!-- Margin="{Binding ElementName=TabItemContent, Converter={StaticResource content2MarginConverter}}" /> -->
+                            <ContentPresenter x:Name="TabItemContent" ContentSource="Header"
+                                              Margin="10,2,10,2" VerticalAlignment="Center"
+                                              TextElement.Foreground="{StaticResource ForegroundBrush}"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True" SourceName="grd">
+                                <Setter Property="Stroke" Value="{StaticResource HoverBrush}" TargetName="TabPath"/>
+                            </Trigger>
+                            <Trigger Property="Selector.IsSelected" Value="True">
+                                <Setter Property="Fill" TargetName="TabPath">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="#FFe4f6fa"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="BitmapEffect">
+                                    <Setter.Value>
+                                        <DropShadowBitmapEffect Direction="302" Opacity="0.4" ShadowDepth="2" Softness="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Panel.ZIndex" Value="2"/>
+                                <Setter Property="Visibility" Value="Hidden" TargetName="TabItemTopBorder"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+</ResourceDictionary>

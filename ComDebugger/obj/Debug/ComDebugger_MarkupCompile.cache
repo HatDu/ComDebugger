@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\Administrator\documents\visual studio 2015\Projects\ComDebugger\ComDebugger\obj\Debug\
+C:\Users\maomao\Documents\Visual Studio 2015\Projects\ComDebugger\ComDebugger\obj\Debug\
 ComDebugger
 none
 false
 DEBUG;TRACE
-C:\Users\Administrator\documents\visual studio 2015\Projects\ComDebugger\ComDebugger\App.xaml
-2741976025
+C:\Users\maomao\Documents\Visual Studio 2015\Projects\ComDebugger\ComDebugger\App.xaml
+7-1306027364
 
-10-69570738
-16-198664998
-MainWindow.xaml;ToggleButtonStyle.xaml;
+111761130171
+191048253524
+MainWindow.xaml;styles\BigFontTextStyle.xaml;styles\Slider1.xaml;styles\SliderCustomer.xaml;styles\TabControl.xaml;styles\TestTextStyle.xaml;styles\ToggleButtonStyle1.xaml;
 
 False
 

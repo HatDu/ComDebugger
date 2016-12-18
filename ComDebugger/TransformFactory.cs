@@ -37,8 +37,13 @@ namespace SerialTestConsole
             target = new byte[DataStrHex.Count];
 
             int index = 0;
-            foreach (string i in DataStrHex)
-                target[index++] = (byte)(Convert.ToInt32(i, 16));
+            try {
+                foreach (string i in DataStrHex)
+                    target[index++] = (byte)(Convert.ToByte(i, 16));
+            } catch {
+                throw new Exception("请输入正确的十六进制数");
+            }
+            
             return target;
         }
         /// <summary>
